@@ -18,6 +18,7 @@
 
     <modules>
         <module>fleet-location-service</module>
+        <module>service-location-service</module>
     </modules>
 
     <properties>

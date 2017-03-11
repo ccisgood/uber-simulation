@@ -8,10 +8,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="fleet-location-service" />
+        <module name="service-location-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="fleet-location-service" target="1.8" />
+      <module name="service-location-service" target="1.8" />
       <module name="uber-vehicle-fleet-simulation" target="1.8" />
     </bytecodeTargetLevel>
   </component>
