@@ -1,9 +1,19 @@
 server:
   port: 9006
+  
 spring:
   application:
     name: fleet-location-ingest
-  cloud:
-    stream:
-      bindings:
-        output: vehicles
+    
+  rabbitmq:
+        host: rabbitmq      
+        port: 15672
+
+  data:
+    mongodb:       
+      uri: mongodb://mongodb:27017/newdb
+      
+cloud:
+  stream:
+    bindings:
+     output: vehicles

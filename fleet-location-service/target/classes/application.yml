@@ -3,3 +3,6 @@ server:
 spring:
   application:
     name: fleet-location-service
+  data:
+    mongodb:       
+      uri: mongodb://mongodb:27017/newdb     

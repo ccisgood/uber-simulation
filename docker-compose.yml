@@ -1,10 +1,85 @@
-rabbitmq:
-  image: rabbitmq:3-management
-  ports:
+version: '3'
+services: 
+  rabbitmq:
+   image: rabbitmq:3-management
+   container_name: rabbitmq
+   ports:
     - "5672:5672"
     - "15672:15672"
+   networks:
+      - uber-network   
 
-mongodb:
-  image: mongo
-  ports:
+  mongodb:
+   image: mongo
+   container_name: mongodb
+   ports:
     - "27017:27017"
+   networks:
+      - uber-network   
+    
+  fleet-location-ingest:
+    image: fleet-location-ingest
+    build: ./fleet-location-ingest
+    container_name: fleet-location-ingest
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    links:
+      - mongodb
+      - rabbitmq    
+    depends_on:
+      - mongodb
+      - rabbitmq      
+    ports:
+      - '9006:9006'  
+    networks:
+      - uber-network  
+      
+  fleet-location-service:
+    image: fleet-location-service
+    build: ./fleet-location-service
+    container_name: fleet-location-service
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s  
+    links:
+      - mongodb
+      - rabbitmq    
+    depends_on:
+      - mongodb
+      - rabbitmq          
+    ports:
+      - '9000:9000'  
+    networks:
+      - uber-network        
+      
+  service-location-service:
+    image: service-location-service
+    build: ./service-location-service
+    container_name: service-location-service
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s  
+    links:
+      - mongodb
+      - rabbitmq    
+    depends_on:
+      - mongodb
+      - rabbitmq          
+    ports:
+      - '9001:9001'  
+    networks:
+      - uber-network  
+
+networks:
+  uber-network:
+    driver: bridge      
